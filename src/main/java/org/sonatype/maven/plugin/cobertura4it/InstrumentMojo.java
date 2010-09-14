@@ -25,15 +25,12 @@ package org.sonatype.maven.plugin.cobertura4it;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
@@ -151,7 +148,7 @@ public class InstrumentMojo
     {
         // look for cobertura dependency in this plugin classpath
         final Map<String, Artifact> pluginArtifactMap = ArtifactUtils.artifactMapByVersionlessId( pluginClasspath );
-        Artifact coberturaArtifact = (Artifact) pluginArtifactMap.get( "net.sourceforge.cobertura:cobertura" );
+        Artifact coberturaArtifact = pluginArtifactMap.get( "net.sourceforge.cobertura:cobertura" );
 
         if ( coberturaArtifact == null )
         {
@@ -181,7 +178,7 @@ public class InstrumentMojo
     private Artifact artifactScopeToTest( Artifact artifact )
     {
         return factory.createArtifact( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
-                                       Artifact.SCOPE_TEST, artifact.getType() );
+            Artifact.SCOPE_TEST, artifact.getType() );
     }
 
     /**
@@ -255,7 +252,8 @@ public class InstrumentMojo
                 {
 
                     byte[] classContent = IOUtil.toByteArray( input );
-                    if ( file.endsWith( ".class" ) )
+                    if ( classContent.length > 8 // ClassReader tries to read the eighth byte
+                        && file.endsWith( ".class" ) )
                     {
                         ClassReader cr = new ClassReader( classContent );
                         ClassWriter cw = new ClassWriter( ClassWriter.COMPUTE_MAXS );
