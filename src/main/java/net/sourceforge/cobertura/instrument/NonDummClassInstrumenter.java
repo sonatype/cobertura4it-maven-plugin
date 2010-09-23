@@ -10,6 +10,7 @@ public class NonDummClassInstrumenter
     extends ClassInstrumenter
 {
 
+    @SuppressWarnings( "rawtypes" )
     public NonDummClassInstrumenter( ProjectData projectData, ClassVisitor cv, Collection ignoreRegexs,
                                      Collection ignoreBranchesRegexes )
     {

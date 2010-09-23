@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -94,14 +95,14 @@ public class ArtifactInstrumenterMojo
      * 
      * @parameter
      */
-    private Collection ignoreRegexes = new Vector();
+    private Collection<Pattern> ignoreRegexes = new Vector<Pattern>();
 
     /**
      * // TODO need to figure out what are this about
      * 
      * @parameter
      */
-    private Collection ignoreBranchesRegexes = new Vector();
+    private Collection<Pattern> ignoreBranchesRegexes = new Vector<Pattern>();
 
     public void execute()
         throws MojoExecutionException
@@ -278,7 +279,8 @@ public class ArtifactInstrumenterMojo
         {
             Artifact artifact =
                 artifactFactory.createArtifactWithClassifier( artifactItem.getGroupId(), artifactItem.getArtifactId(),
-                    artifactItem.getVersion(), artifactItem.getType(), artifactItem.getClassifier() );
+                                                              artifactItem.getVersion(), artifactItem.getType(),
+                                                              artifactItem.getClassifier() );
             try
             {
                 resolver.resolve( artifact, remoteRepositories, localRepository );

@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import net.sourceforge.cobertura.coveragedata.CoverageDataFileHandler;
 import net.sourceforge.cobertura.coveragedata.ProjectData;
@@ -56,6 +57,7 @@ import org.objectweb.asm.ClassWriter;
  * 
  * @author <a href="mailto:velo.br@gmail.com">Marvin Froeder</a>
  * @goal instrument
+ * @phase process-test-resources
  * @requiresDependencyResolution test
  */
 public class InstrumentMojo
@@ -112,7 +114,7 @@ public class InstrumentMojo
      * @required
      * @readonly
      */
-    protected List pluginClasspath;
+    protected List<Artifact> pluginClasspath;
 
     /**
      * Maven project.
@@ -128,14 +130,14 @@ public class InstrumentMojo
      * 
      * @parameter
      */
-    private Collection ignoreRegexes = new Vector();
+    private Collection<Pattern> ignoreRegexes = new Vector<Pattern>();
 
     /**
      * // TODO need to figure out what are this about
      * 
      * @parameter
      */
-    private Collection ignoreBranchesRegexes = new Vector();
+    private Collection<Pattern> ignoreBranchesRegexes = new Vector<Pattern>();
 
     /**
      * Add cobertura dependency to project test classpath. When tests are executed, cobertura runtime dependency is
@@ -143,6 +145,7 @@ public class InstrumentMojo
      * 
      * @throws MojoExecutionException if cobertura dependency could not be added
      */
+    @SuppressWarnings( "unchecked" )
     private void addCoberturaDependenciesToTestClasspath()
         throws MojoExecutionException
     {
@@ -178,7 +181,7 @@ public class InstrumentMojo
     private Artifact artifactScopeToTest( Artifact artifact )
     {
         return factory.createArtifact( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
-            Artifact.SCOPE_TEST, artifact.getType() );
+                                       Artifact.SCOPE_TEST, artifact.getType() );
     }
 
     /**

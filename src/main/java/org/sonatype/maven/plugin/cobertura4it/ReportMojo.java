@@ -18,11 +18,6 @@ import net.sourceforge.cobertura.reporting.xml.XMLReport;
 import net.sourceforge.cobertura.util.FileFinder;
 import net.sourceforge.cobertura.util.Source;
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -41,43 +36,7 @@ public class ReportMojo
     extends AbstractMojo
 {
 
-    /**
-     * @component
-     */
-    private ArtifactFactory artifactFactory;
 
-    /**
-     * @component
-     */
-    private ArtifactResolver resolver;
-
-    /**
-     * @parameter default-value="${localRepository}"
-     * @readonly
-     */
-    private ArtifactRepository localRepository;
-
-    /**
-     * @parameter default-value="${project.remoteArtifactRepositories}"
-     * @readonly
-     */
-    private List<? extends ArtifactRepository> remoteRepositories;
-
-    /**
-     * The project's base directory.
-     * 
-     * @parameter default-value="${basedir}"
-     * @readonly
-     */
-    private File baseDirectory;
-
-    /**
-     * The project's build directory.
-     * 
-     * @parameter default-value="${project.build.directory}"
-     * @readonly
-     */
-    private File buildDirectory;
 
     /**
      * The location of the generated report files.
@@ -95,27 +54,11 @@ public class ReportMojo
     private String[] formats;
 
     /**
-     * The offline metadata and runtime coverage files to generate the reports from. Defaults to all <code>*.ec</code>,
-     * <code>*.em</code> and <code>*.es</code> files within the project base directory and within any subdirectory of
-     * the build directory.
-     * 
-     * @parameter
-     */
-    private FileSet[] dataSets;
-
-    /**
      * An optional collection of source directories to be used for the HTML report.
      * 
      * @parameter
      */
     private FileSet[] sourceSets;
-
-    /**
-     * An optional collection of artifacts whose source attachments should be resolved for the HTML report.
-     * 
-     * @parameter
-     */
-    private ArtifactItem[] artifactItems;
 
     /**
      * Location of the file.
@@ -241,27 +184,6 @@ public class ReportMojo
         }
 
         return sourcePath;
-    }
-
-    private List<Artifact> resolveArtifacts()
-    {
-        List<Artifact> artifacts = new ArrayList<Artifact>();
-        for ( ArtifactItem artifactItem : artifactItems )
-        {
-            Artifact artifact =
-                artifactFactory.createArtifactWithClassifier( artifactItem.getGroupId(), artifactItem.getArtifactId(),
-                    artifactItem.getVersion(), artifactItem.getType(), "sources" );
-            try
-            {
-                resolver.resolve( artifact, remoteRepositories, localRepository );
-            }
-            catch ( AbstractArtifactResolutionException e )
-            {
-                getLog().warn( "Artifact " + artifact.toString() + " source not available at Maven repository" );
-            }
-            artifacts.add( artifact );
-        }
-        return artifacts;
     }
 
 }
