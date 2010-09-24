@@ -10,7 +10,7 @@
 
   <groupId>org.sonatype.maven.plugin</groupId>
   <artifactId>cobertura4it-maven-plugin</artifactId>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
 
   <packaging>maven-plugin</packaging>
 
@@ -91,11 +91,4 @@
       </plugin>
     </plugins>
   </build>
-
-
-  <scm>
-    <connection>scm:svn:http://svn.sonatype.org/plugins/tags/cobertura4it-maven-plugin-1.0</connection>
-    <developerConnection>scm:svn:https://svn.sonatype.org/plugins/tags/cobertura4it-maven-plugin-1.0</developerConnection>
-    <url>http://svn.sonatype.org/plugins/tags/cobertura4it-maven-plugin-1.0</url>
-  </scm>
 </project>
